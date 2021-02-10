@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6880354630012839950}
   - component: {fileID: 1659779642}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,8 +57,9 @@ GameObject:
   m_Component:
   - component: {fileID: 154118601957661847}
   - component: {fileID: 5973681915469900462}
-  - component: {fileID: 4429803050309930920}
-  m_Layer: 0
+  - component: {fileID: 9005311422972997176}
+  - component: {fileID: -3330069746574807506}
+  m_Layer: 8
   m_Name: Zombi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +103,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &4429803050309930920
+--- !u!114 &9005311422972997176
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,6 +116,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+--- !u!114 &-3330069746574807506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7532112215493587485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da2111fc9c86f143bee87ee060df4b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 30
 --- !u!1 &8334017483689600524
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,7 +139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2066388453216778477}
   - component: {fileID: 2984011876748854042}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sprite Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -4,22 +4,104 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f;
-    public Vector2 direction;
-
-    // Start is called before the first frame update
-    void Start()
+    private enum State
     {
-
+        Idle,
+        Walking,
+        Attacking
     }
 
-    // Update is called once per frame
+    [SerializeField] float attackCooldown = .3f;
+    float attackTimer;
+    public float attackRange;
+    public LayerMask damageMask;
+    public float damage = 10f;
+
+    [SerializeField] float speed = 5f;
+    public Vector2 direction;
+    private State state;
+
+    void Awake()
+    {
+        // Set starting status and initial direction
+        state = State.Idle;
+        direction = new Vector2(1, 0);
+    }
+
     void Update()
     {
+        switch (state)
+        {
+            case State.Idle:
+            case State.Walking:
+                StandingUpdate();
+                break;
+            case State.Attacking:
+                AttackUpdate();
+                break;
+        }
+    }
+
+    void StandingUpdate()
+    {
+        // Get the user directional input and clamp it to 1
         float verticalInput = Input.GetAxis("Vertical");
         float horizontalInput = Input.GetAxis("Horizontal");
-        direction = new Vector2(horizontalInput, verticalInput);
-        direction = Vector2.ClampMagnitude(direction, 1);
-        transform.Translate(direction * speed * Time.deltaTime);
+        Vector2 directionInput = new Vector2(horizontalInput, verticalInput);
+        directionInput = Vector2.ClampMagnitude(directionInput, 1);
+
+        // Calculate direction of the character
+        if (directionInput.magnitude > .1f)
+        {
+            state = State.Walking;
+            direction = directionInput.normalized;
+        }
+        else
+        {
+            state = State.Idle;
+        }
+
+        // Attack or move?
+        if (Input.GetButton("Fire1") || Input.GetKey(KeyCode.Space))
+        {
+            state = State.Attacking;
+            attackTimer = attackCooldown;
+            Attack();
+        }
+        else
+        {
+            transform.Translate(directionInput * speed * Time.deltaTime);
+        }
+
+    }
+
+    void AttackUpdate()
+    {
+        attackTimer = attackTimer - Time.deltaTime;
+        if (attackTimer <= 0)
+        {
+            state = State.Idle;
+        }
+    }
+
+    void Attack()
+    {
+        Collider2D[] objectsToDamage = Physics2D.OverlapCircleAll(AttackPosition(), attackRange, damageMask);
+        for (int i = 0; i < objectsToDamage.Length; i++)
+        {
+            objectsToDamage[i].GetComponentInParent<Health>().TakeDamage(damage);
+        }
+    }
+
+    Vector2 AttackPosition()
+    {
+        return new Vector2(transform.position.x + direction.x, transform.position.y + direction.y);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(AttackPosition(), attackRange);
     }
 }
+
