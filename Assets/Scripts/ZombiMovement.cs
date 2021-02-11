@@ -4,19 +4,35 @@ using UnityEngine;
 
 public class ZombiMovement : MonoBehaviour
 {
-    public float speed = 2f;
     private GameObject player;
+
+    Rigidbody2D enemyRb;
+    public float speed = 2f;
+    public float attackRange = 1f;
 
     void Awake()
     {
         player = GameObject.Find("Player");
+        enemyRb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        Vector2 direction = player.transform.position - transform.position;
-        direction = Vector2.ClampMagnitude(direction, 1);
-        transform.Translate(direction * speed * Time.deltaTime);
+        Vector2 directionToPlayer = player.transform.position - transform.position;
+        if (directionToPlayer.magnitude > attackRange)
+        {
+            directionToPlayer = Vector2.ClampMagnitude(directionToPlayer, 1);
+            enemyRb.MovePosition(GetPosition2D() + directionToPlayer * speed * Time.deltaTime);
+        }
+        else
+        {
+
+        }
+    }
+
+    Vector2 GetPosition2D()
+    {
+        return new Vector2(transform.position.x, transform.position.y);
     }
 }

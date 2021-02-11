@@ -11,24 +11,27 @@ public class PlayerController : MonoBehaviour
         Attacking
     }
 
+    State state;
+
     [SerializeField] float attackCooldown = .3f;
     float attackTimer;
     public float attackRange;
     public LayerMask damageMask;
     public float damage = 10f;
 
+    Rigidbody2D playerRb;
     [SerializeField] float speed = 5f;
-    public Vector2 direction;
-    private State state;
+    Vector2 direction;
 
     void Awake()
     {
         // Set starting status and initial direction
         state = State.Idle;
         direction = new Vector2(1, 0);
+        playerRb = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         switch (state)
         {
@@ -70,7 +73,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            transform.Translate(directionInput * speed * Time.deltaTime);
+            playerRb.MovePosition(GetPosition2D() + directionInput * speed * Time.deltaTime);
         }
 
     }
@@ -93,9 +96,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    Vector2 GetPosition2D()
+    {
+        return new Vector2(transform.position.x, transform.position.y);
+    }
+
     Vector2 AttackPosition()
     {
-        return new Vector2(transform.position.x + direction.x, transform.position.y + direction.y);
+        return GetPosition2D() + direction;
     }
 
     void OnDrawGizmosSelected()

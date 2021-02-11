@@ -2565,6 +2565,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombi
       objectReference: {fileID: 0}
+    - target: {fileID: 9005311422972997176, guid: edd84dc4e7f27274e9eeeae041f0df6f,
+        type: 3}
+      propertyPath: attackRange
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: edd84dc4e7f27274e9eeeae041f0df6f, type: 3}
 --- !u!1 &1036382756
