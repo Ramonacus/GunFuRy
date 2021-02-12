@@ -29,6 +29,16 @@ public class ZombiMovement : MonoBehaviour
         {
 
         }
+
+        // TODO replace with actual animations for moving left
+        if (directionToPlayer.x < 0)
+        {
+            transform.rotation = new Quaternion(0, 180, 0, 0);
+        }
+        else
+        {
+            transform.rotation = new Quaternion(0, 0, 0, 0);
+        }
     }
 
     Vector2 GetPosition2D()
