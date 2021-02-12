@@ -45,8 +45,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.9, y: 0.5}
-  m_Direction: 1
+  m_Size: {x: 0.5, y: 0.75}
+  m_Direction: 0
 --- !u!1 &7532112215493587485
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,8 +94,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 80
-  m_LinearDrag: 0
+  m_Mass: 1
+  m_LinearDrag: 2000
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -141,6 +141,7 @@ GameObject:
   - component: {fileID: 428606443161544446}
   - component: {fileID: 6351159185731830102}
   - component: {fileID: 4168622189421157272}
+  - component: {fileID: 352270884391989771}
   m_Layer: 0
   m_Name: Zombi Animation
   m_TagString: Untagged
@@ -232,3 +233,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &352270884391989771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8860095763293849635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64ea2a6d647fcc749a8e58e5aaad1d0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

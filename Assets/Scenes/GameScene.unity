@@ -7955,8 +7955,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   damage: 10
-  speed: 5
-  direction: {x: 0, y: 0}
+  speed: 3
 --- !u!50 &1880710900
 Rigidbody2D:
   serializedVersion: 4
