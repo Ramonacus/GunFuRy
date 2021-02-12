@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZombiMovement : MonoBehaviour
+public class EnemyMovement : MonoBehaviour
 {
     private enum State
     {

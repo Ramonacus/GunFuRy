@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationEvents : MonoBehaviour
+public class EnemyAnimationEvents : MonoBehaviour
 {
     public void OnAttackEnd()
     {
-        GetComponentInParent<ZombiMovement>().EndAttack();
+        GetComponentInParent<EnemyMovement>().EndAttack();
     }
 }
