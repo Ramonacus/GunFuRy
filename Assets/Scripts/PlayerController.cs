@@ -10,25 +10,26 @@ public class PlayerController : MonoBehaviour
         Walking,
         Attacking
     }
-
     State state;
 
-    [SerializeField] float attackCooldown = .3f;
-    float attackTimer;
-    public float attackRange;
+    public float attackArea;
     public LayerMask damageMask;
+    public float attackRange = 1.2f;
     public float damage = 10f;
 
-    Rigidbody2D playerRb;
+    Rigidbody2D rbody;
     [SerializeField] float speed = 5f;
+
     Vector2 direction;
+    [SerializeField] float attackCooldown = .3f;
+    float attackTimer;
 
     void Awake()
     {
         // Set starting status and initial direction
         state = State.Idle;
+        rbody = GetComponent<Rigidbody2D>();
         direction = new Vector2(1, 0);
-        playerRb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
@@ -67,13 +68,11 @@ public class PlayerController : MonoBehaviour
         // Attack or move?
         if (Input.GetButton("Fire1") || Input.GetKey(KeyCode.Space))
         {
-            state = State.Attacking;
-            attackTimer = attackCooldown;
             Attack();
         }
         else
         {
-            playerRb.MovePosition(GetPosition2D() + directionInput * speed * Time.deltaTime);
+            rbody.MovePosition(GetPosition2D() + directionInput * speed * Time.deltaTime);
         }
 
     }
@@ -89,27 +88,20 @@ public class PlayerController : MonoBehaviour
 
     void Attack()
     {
-        Collider2D[] objectsToDamage = Physics2D.OverlapCircleAll(AttackPosition(), attackRange, damageMask);
+        state = State.Attacking;
+        attackTimer = attackCooldown;
+        Collider2D[] objectsToDamage = Physics2D.OverlapCircleAll(
+            GetPosition2D() + direction * attackRange,
+            attackArea,
+            damageMask
+        );
         for (int i = 0; i < objectsToDamage.Length; i++)
         {
             objectsToDamage[i].GetComponentInParent<Health>().TakeDamage(damage);
         }
     }
 
-    Vector2 GetPosition2D()
-    {
-        return new Vector2(transform.position.x, transform.position.y);
-    }
+    Vector2 GetPosition2D() => new Vector2(transform.position.x, transform.position.y);
 
-    Vector2 AttackPosition()
-    {
-        return GetPosition2D() + direction;
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(AttackPosition(), attackRange);
-    }
 }
 

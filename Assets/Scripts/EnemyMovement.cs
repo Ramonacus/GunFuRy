@@ -12,30 +12,33 @@ public class EnemyMovement : MonoBehaviour
     }
     State state;
 
-    GameObject player;
+    public float attackArea;
+    public LayerMask damageMask;
+    public float attackRange;
+    public float damage;
+
+    Rigidbody2D rbody;
+    [SerializeField] float speed;
+
     Animator animator;
 
-    Rigidbody2D enemyRb;
-    public float speed = 2f;
-    public float attackRange = 1f;
+    GameObject player;
 
     void Awake()
     {
         player = GameObject.Find("Player");
         state = State.Idle;
-        enemyRb = GetComponent<Rigidbody2D>();
+        rbody = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
     }
 
     void FixedUpdate()
     {
-        Vector2 directionToPlayer = player.transform.position - transform.position;
-
-
         switch (state)
         {
             case State.Idle:
             case State.Walking:
+                Vector2 directionToPlayer = player.transform.position - transform.position;
                 StandingUpdate(directionToPlayer);
                 break;
             case State.Attacking:
@@ -52,7 +55,7 @@ public class EnemyMovement : MonoBehaviour
         {
             animator.SetBool("Attacking", false);
             directionToPlayer = Vector2.ClampMagnitude(directionToPlayer, 1);
-            enemyRb.MovePosition(GetPosition2D() + directionToPlayer * speed * Time.deltaTime);
+            rbody.MovePosition(GetPosition2D() + directionToPlayer * speed * Time.deltaTime);
         }
         else
         {
@@ -66,21 +69,14 @@ public class EnemyMovement : MonoBehaviour
         animator.SetBool("Attacking", true);
     }
 
+    Vector2 GetPosition2D() => new Vector2(transform.position.x, transform.position.y);
+
     public void EndAttack()
     {
         state = State.Idle;
         animator.SetBool("Attacking", false);
     }
 
-    Vector2 GetPosition2D()
-    {
-        return new Vector2(transform.position.x, transform.position.y);
-    }
+    public void ActivateHitbox() => Debug.Log("Enemy hits!");
 
-    private void OnDrawGizmosSelected()
-    {
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(GetPosition2D(), attackRange);
-    }
 }
