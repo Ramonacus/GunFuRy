@@ -1,0 +1,47 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://Art/Zombi/zombi-walk-E7.png" type="Texture" id=1]
+[ext_resource path="res://Art/Zombi/zombi-walk-E5.png" type="Texture" id=2]
+[ext_resource path="res://Art/Zombi/zombi-walk-E2.png" type="Texture" id=3]
+[ext_resource path="res://Art/Zombi/zombi-walk-E1.png" type="Texture" id=4]
+[ext_resource path="res://Art/Zombi/zombi-walk-E9.png" type="Texture" id=5]
+[ext_resource path="res://Art/Zombi/zombi-walk-E3.png" type="Texture" id=6]
+[ext_resource path="res://Art/Zombi/zombi-walk-E8.png" type="Texture" id=7]
+[ext_resource path="res://Art/Zombi/zombi-walk-E4.png" type="Texture" id=8]
+[ext_resource path="res://Art/Zombi/zombi-walk-E6.png" type="Texture" id=9]
+[ext_resource path="res://Scripts/Zombi.gd" type="Script" id=10]
+[ext_resource path="res://Art/Zombi/zombi-attack-E1.png" type="Texture" id=11]
+[ext_resource path="res://Art/Zombi/zombi-attack-E3.png" type="Texture" id=12]
+[ext_resource path="res://Art/Zombi/zombi-attack-E4.png" type="Texture" id=13]
+[ext_resource path="res://Art/Zombi/zombi-attack-E5.png" type="Texture" id=14]
+[ext_resource path="res://Art/Zombi/zombi-attack-E6.png" type="Texture" id=15]
+[ext_resource path="res://Art/Zombi/zombi-attack-E2.png" type="Texture" id=16]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 11 ), ExtResource( 16 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ) ],
+"loop": false,
+"name": "Zombi attack E",
+"speed": 8.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 3 ), ExtResource( 6 ), ExtResource( 8 ), ExtResource( 2 ), ExtResource( 9 ), ExtResource( 1 ), ExtResource( 7 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "Zombi walk E",
+"speed": 8.0
+} ]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 6.89538
+
+[node name="Zombi" type="KinematicBody2D"]
+script = ExtResource( 10 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 1 )
+animation = "Zombi walk E"
+frame = 2
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 10 )
+shape = SubResource( 2 )
