@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/zombi-walk-E6.png-e911c2bfb27995373e2060e32abd195d.stex"
+path="res://.import/zombi-attack-E.png-4f975d3236f8be60b3d3f5780586a662.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Zombi/zombi-walk-E6.png"
-dest_files=[ "res://.import/zombi-walk-E6.png-e911c2bfb27995373e2060e32abd195d.stex" ]
+source_file="res://Art/Zombi/zombi-attack-E.png"
+dest_files=[ "res://.import/zombi-attack-E.png-4f975d3236f8be60b3d3f5780586a662.stex" ]
 
 [params]
 

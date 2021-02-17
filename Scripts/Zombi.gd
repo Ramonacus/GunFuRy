@@ -3,22 +3,28 @@ extends KinematicBody2D
 enum State {STANDING, ATTACKING}
 var state = State.STANDING
 
-var speed = 50
+# Animations enum
+const Animations = {
+	WALK = "Zombi walk E",
+	ATTACK = "Zombi attack E"
+}
+
+const speed = 50
 var direction = Vector2()
 
-var attack_range = 20
-var attack_cooldown = 1.4
-var attack_timer
+const attack_range = 20
 
 onready var player: KinematicBody2D = get_node("../Player")
-onready var sprite: AnimatedSprite = $AnimatedSprite
+
+
+func _ready():
+	start_standing()
 
 
 func _physics_process(delta):
 	move_and_collide(speed * direction * delta)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	match state:
 		State.STANDING:	
@@ -27,26 +33,34 @@ func _process(delta):
 			process_attacking(delta)
 
 
+# Standing state
+func start_standing():
+	state = State.STANDING
+	$AnimationPlayer.play(Animations.WALK)
+
+
 func process_standing(delta):
-	var vectorToPlayer = player.get_position() - get_position()
-	direction = vectorToPlayer.normalized()
-	sprite.set_flip_h(direction.x < 0)
+	var vector_to_player = player.get_position() - get_position()
+	$Sprite.set_flip_h(vector_to_player.x < 0)	
 	
-	if vectorToPlayer.length() <= attack_range:
-		attack()
-	print(vectorToPlayer.length() )
+	if vector_to_player.length() <= attack_range:
+		start_attack(vector_to_player)
+	else:
+		direction = vector_to_player.normalized()
+
+
+# Attack state
+func start_attack(vector_to_player):
+	direction = Vector2()
+	state = State.ATTACKING
+	$AnimationPlayer.play(Animations.ATTACK)
+	$Hurtbox.rotation = Vector2.RIGHT.angle_to(vector_to_player)
 
 
 func process_attacking(delta):
-	attack_timer -= delta
-	if attack_timer <= 0:
-		state = State.STANDING
-		sprite.animation = "Zombi walk E"
+	pass
 
 
-func attack():
-	direction = Vector2()
-	state = State.ATTACKING
-	sprite.animation = "Zombi attack E"
-	attack_timer = attack_cooldown
-	
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if anim_name != Animations.WALK:
+		start_standing()
