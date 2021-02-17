@@ -54,7 +54,7 @@ func start_attack(vector_to_player):
 	direction = Vector2()
 	state = State.ATTACKING
 	$AnimationPlayer.play(Animations.ATTACK)
-	$Hurtbox.rotation = Vector2.RIGHT.angle_to(vector_to_player)
+	$Hitbox.rotation = Vector2.RIGHT.angle_to(vector_to_player)
 
 
 func process_attacking(delta):
@@ -64,3 +64,8 @@ func process_attacking(delta):
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name != Animations.WALK:
 		start_standing()
+
+
+
+func _on_Hitbox_area_entered(area):
+	area.find_parent("Player").take_damage()

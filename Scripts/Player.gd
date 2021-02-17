@@ -5,6 +5,12 @@ var speed = 150
 var direction = Vector2()
 onready var sprite: AnimatedSprite = $AnimatedSprite
 
+
+func _physics_process(delta):
+	calculate_direction()
+	move_and_collide(speed * direction * delta)
+
+
 func calculate_direction():
 	# Detect up/down/left/right keystate and only move when pressed.
 	direction = Vector2()
@@ -19,8 +25,6 @@ func calculate_direction():
 	direction = direction.normalized()
 
 
-func _physics_process(delta):
-	calculate_direction()
-	move_and_collide(speed * direction * delta)
-
+func take_damage():
+	print("Ouch")
 
