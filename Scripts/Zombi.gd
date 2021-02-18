@@ -1,3 +1,5 @@
+extends KinematicBody2D
+
 const State = {
 	IDLE = "idle",
 	WALKING = "walking",
@@ -51,19 +53,18 @@ func start_walking():
 
 func process_walking(delta):
 	var vector_to_player = player.get_position() - get_position()
-	$Sprite.set_flip_h(vector_to_player.x < 0)	
+	direction = vector_to_player.normalized()
+	$Sprite.set_flip_h(direction.x < 0)	
 	
 	if vector_to_player.length() <= attack_range:
 		state = State.ATTACKING
-	else:
-		direction = vector_to_player.normalized()
 
 
 # Attack state
-func start_attacking(vector_to_player):
-	direction = Vector2()
+func start_attacking():
 	$AnimationPlayer.play(Animations.ATTACK)
-	$Hitbox.rotation = Vector2.RIGHT.angle_to(vector_to_player)
+	$Hitbox.rotation = Vector2.RIGHT.angle_to(direction)
+	direction = Vector2()
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name != Animations.WALK:

@@ -7,7 +7,7 @@
 [sub_resource type="CircleShape2D" id=1]
 radius = 6.89538
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=2]
 resource_name = "Zombi attack E"
 length = 0.9
 tracks/0/type = "value"
@@ -59,8 +59,7 @@ tracks/3/keys = {
 "values": [ true, false, true ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "Zombi walk E"
+[sub_resource type="Animation" id=3]
 length = 1.5
 loop = true
 tracks/0/type = "value"
@@ -116,8 +115,8 @@ texture = ExtResource( 1 )
 hframes = 9
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-"anims/Zombi attack E" = SubResource( 3 )
-"anims/Zombi walk E" = SubResource( 2 )
+"anims/Zombi attack E" = SubResource( 2 )
+"anims/Zombi walk E" = SubResource( 3 )
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 2147483648
