@@ -11,7 +11,8 @@ var previous_state = ""
 
 # Animations enum
 const Animation = {
-	IDLE = "Hero idle"
+	IDLE = "Hero idle",
+	ATTACKING = "Hero attacking"
 }
 
 
@@ -43,15 +44,26 @@ func change_state(new_state = null):
 		call("stop_" + previous_state)
 	previous_state = state
 
-
+func get_input_direction():
+	# Detect up/down/left/right keystate and only move when pressed.
+	var user_input = Vector2()
+	if Input.is_action_pressed("ui_right"):
+		user_input.x += 1
+	if Input.is_action_pressed("ui_left"):
+		user_input.x -= 1
+	if Input.is_action_pressed("ui_down"):
+		user_input.y += 1
+	if Input.is_action_pressed("ui_up"):
+		user_input.y -= 1
+	return user_input.normalized()
+	
+	
 # Standing state
 func start_idle():
 	$AnimationPlayer.play(Animation.IDLE)
-	print("Idle")
 
 func start_walking():
 	$AnimationPlayer.play(Animation.IDLE)
-	print("Walking")
 
 func process_idle(delta):
 	process_standing()
@@ -61,23 +73,27 @@ func process_walking(delta):
 
 func process_standing():
 	direction = get_input_direction()
-	state = State.WALKING if (direction.length() > 0) else State.IDLE
 	$Sprite.set_flip_h(direction.x < 0)
+	if Input.is_action_just_pressed("ui_punch"):
+		state = State.ATTACKING
+	elif direction.length() > 0:
+		state = State.WALKING
+	else:
+		state = State.IDLE
 
-func get_input_direction():
-	# Detect up/down/left/right keystate and only move when pressed.
-	var user_input = Vector2()
-	if Input.is_action_pressed('ui_right'):
-		user_input.x += 1
-	if Input.is_action_pressed('ui_left'):
-		user_input.x -= 1
-	if Input.is_action_pressed('ui_down'):
-		user_input.y += 1
-	if Input.is_action_pressed('ui_up'):
-		user_input.y -= 1
-	return user_input.normalized()
+
+# Attacking state
+func start_attacking():
+	$AnimationPlayer.play(Animation.ATTACKING)
+	direction = Vector2()
 
 
 func take_damage():
 	print("Ouch")
+
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	match anim_name:
+		Animation.ATTACKING:
+			state = State.WALKING
 
