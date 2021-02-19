@@ -1,15 +1,16 @@
 extends KinematicBody2D
 
+#States enum
 const State = {
 	IDLE = "idle",
 	WALKING = "walking",
 	ATTACKING = "attacking"
 }
 var state = State.IDLE
-var previous_state = State.IDLE
+var previous_state = ""
 
 # Animations enum
-const Animations = {
+const Animation = {
 	WALK = "Zombi walk E",
 	ATTACK = "Zombi attack E"
 }
@@ -19,7 +20,7 @@ var direction = Vector2()
 
 const attack_range = 20
 
-onready var player: KinematicBody2D = get_node("../Player")
+onready var player = get_node("../Player")
 
 
 func _ready():
@@ -49,7 +50,7 @@ func change_state(new_state = null):
 
 # WALKING state
 func start_walking():
-	$AnimationPlayer.play(Animations.WALK)
+	$AnimationPlayer.play(Animation.WALK)
 
 func process_walking(delta):
 	var vector_to_player = player.get_position() - get_position()
@@ -62,12 +63,12 @@ func process_walking(delta):
 
 # Attack state
 func start_attacking():
-	$AnimationPlayer.play(Animations.ATTACK)
+	$AnimationPlayer.play(Animation.ATTACK)
 	$Hitbox.rotation = Vector2.RIGHT.angle_to(direction)
 	direction = Vector2()
 
 func _on_AnimationPlayer_animation_finished(anim_name):
-	if anim_name != Animations.WALK:
+	if anim_name != Animation.WALK:
 		state = State.WALKING
 
 func _on_Hitbox_area_entered(area):
