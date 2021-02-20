@@ -6,7 +6,7 @@
 [sub_resource type="CircleShape2D" id=1]
 radius = 7.40569
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=2]
 resource_name = "Hero attacking"
 length = 0.7
 tracks/0/type = "value"
@@ -16,14 +16,13 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5, 0.8 ),
+"times": PoolRealArray( 0, 0.2, 0.6 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ 8, 13, 13 ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "Hero idle"
+[sub_resource type="Animation" id=3]
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -58,6 +57,6 @@ hframes = 8
 frame = 13
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-"anims/Hero attacking" = SubResource( 3 )
-"anims/Hero idle" = SubResource( 2 )
+"anims/Hero attacking" = SubResource( 2 )
+"anims/Hero idle" = SubResource( 3 )
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
