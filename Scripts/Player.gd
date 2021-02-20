@@ -61,9 +61,11 @@ func get_input_direction():
 # Standing state
 func start_idle():
 	$AnimationPlayer.play(Animation.IDLE)
+	speed = 0
 
 func start_walking():
 	$AnimationPlayer.play(Animation.IDLE)
+	speed = 150
 
 func process_idle(delta):
 	process_standing()
@@ -72,11 +74,13 @@ func process_walking(delta):
 	process_standing()
 
 func process_standing():
-	direction = get_input_direction()
+	var input_direction  = get_input_direction()
+	if input_direction.length():
+		direction = input_direction
 	$Sprite.set_flip_h(direction.x < 0)
 	if Input.is_action_just_pressed("ui_punch"):
 		state = State.ATTACKING
-	elif direction.length() > 0:
+	elif input_direction.length() > 0:
 		state = State.WALKING
 	else:
 		state = State.IDLE
@@ -85,7 +89,7 @@ func process_standing():
 # Attacking state
 func start_attacking():
 	$AnimationPlayer.play(Animation.ATTACKING)
-	direction = Vector2()
+	speed = 0
 
 
 func take_damage():
