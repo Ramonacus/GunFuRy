@@ -19,6 +19,8 @@ var direction = Vector2()
 
 const attack_range = 20
 
+var health = 30
+
 onready var player = get_node("../Player")
 
 
@@ -43,9 +45,6 @@ func change_state(new_state):
 		call("start_" + state)
 
 
-func take_damage():
-	print("Uuuuh")
-	change_state(State.WALKING)
 	
 
 # WALKING state
@@ -66,6 +65,13 @@ func start_attacking():
 	$AnimationPlayer.play(Animation.ATTACK)
 	$Hitbox.rotation = Vector2.RIGHT.angle_to(direction)
 	direction = Vector2()
+
+func take_damage(damage):
+	health -= 10
+	if health <= 0:
+		queue_free()
+	else:
+		change_state(State.WALKING)
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name != Animation.WALK:

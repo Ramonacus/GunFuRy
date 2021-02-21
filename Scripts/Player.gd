@@ -18,7 +18,6 @@ const Animation = {
 
 var speed = 150
 var direction = Vector2()
-onready var sprite: AnimatedSprite = $AnimatedSprite
 
 func _ready():
 	state = State.IDLE
@@ -92,10 +91,8 @@ func start_attacking():
 	$Hitbox.rotation = Vector2.RIGHT.angle_to(direction)
 	speed = 0
 
-
 func take_damage():
 	print("Ouch")
-
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	match anim_name:
@@ -103,4 +100,4 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 			state = State.WALKING
 
 func _on_Hitbox_area_entered(area):
-	area.get_parent().take_damage()
+	area.get_parent().take_damage(10)
