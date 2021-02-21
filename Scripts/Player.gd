@@ -89,6 +89,7 @@ func process_standing():
 # Attacking state
 func start_attacking():
 	$AnimationPlayer.play(Animation.ATTACKING)
+	$Hitbox.rotation = Vector2.RIGHT.angle_to(direction)
 	speed = 0
 
 
@@ -101,3 +102,5 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 		Animation.ATTACKING:
 			state = State.WALKING
 
+func _on_Hitbox_area_entered(area):
+	area.get_parent().take_damage()

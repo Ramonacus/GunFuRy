@@ -7,7 +7,6 @@ const State = {
 	ATTACKING = "attacking"
 }
 var state = State.IDLE
-var previous_state = ""
 
 # Animations enum
 const Animation = {
@@ -24,29 +23,30 @@ onready var player = get_node("../Player")
 
 
 func _ready():
-	state = State.WALKING
+	change_state(State.WALKING)
 
 func _physics_process(delta):
 	move_and_collide(speed * direction * delta)
 
 func _process(delta):
-	if state != previous_state:
-		change_state()
 	if has_method("process_" + state):
 		call("process_" + state, delta)
 
-func change_state(new_state = null):
-	if (new_state):
-		state = new_state
-	if state == previous_state:
+func change_state(new_state):
+	if state == new_state:
 		print_debug("Changing to the same state")
 	
+	if has_method("stop_" + state):
+		call("stop_" + state)
+	state = new_state
 	if has_method("start_" + state):
 		call("start_" + state)
-	if has_method("stop_" + previous_state):
-		call("stop_" + previous_state)
-	previous_state = state
 
+
+func take_damage():
+	print("Uuuuh")
+	change_state(State.WALKING)
+	
 
 # WALKING state
 func start_walking():
@@ -58,7 +58,7 @@ func process_walking(delta):
 	$Sprite.set_flip_h(direction.x < 0)	
 	
 	if vector_to_player.length() <= attack_range:
-		state = State.ATTACKING
+		change_state(State.ATTACKING)
 
 
 # Attack state
@@ -69,7 +69,7 @@ func start_attacking():
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name != Animation.WALK:
-		state = State.WALKING
+		change_state(State.WALKING)
 
 func _on_Hitbox_area_entered(area):
 	area.find_parent("Player").take_damage()

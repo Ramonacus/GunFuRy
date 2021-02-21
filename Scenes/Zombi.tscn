@@ -108,6 +108,13 @@ script = ExtResource( 10 )
 [node name="Boundingbox" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource( 1 )
+
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 2147483648
 collision_mask = 2
