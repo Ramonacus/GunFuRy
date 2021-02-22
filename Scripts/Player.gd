@@ -1,13 +1,14 @@
 extends KinematicBody2D
 
+const MAX_SPEED = 150
+const ACCELERATION = 25
+
 # States enum
 const State = {
 	IDLE = "idle",
 	WALKING = "walking",
 	ATTACKING = "attacking"
 }
-var state = State.IDLE
-var previous_state = ""
 
 # Animations enum
 const Animation = {
@@ -15,33 +16,35 @@ const Animation = {
 	ATTACKING = "Hero attacking"
 }
 
-
-var speed = 150
 var direction = Vector2()
+var speed = 0
+var state = ""
+var attack_buffer = []
+
 
 func _ready():
-	state = State.IDLE
+	change_state(State.IDLE)
+
 
 func _physics_process(delta):
 	move_and_collide(speed * direction * delta)
 
+
 func _process(delta):
-	if state != previous_state:
-		change_state()
 	if has_method("process_" + state):
 		call("process_" + state, delta)
 
-func change_state(new_state = null):
-	if (new_state):
-		state = new_state
-	if state == previous_state:
-		print_debug("Changing to the same state")
+
+func change_state(new_state):
+	if state == new_state:
+		return
 	
+	if has_method("stop_" + state):
+		call("stop_" + state)
+	state = new_state
 	if has_method("start_" + state):
 		call("start_" + state)
-	if has_method("stop_" + previous_state):
-		call("stop_" + previous_state)
-	previous_state = state
+
 
 func get_input_direction():
 	# Detect up/down/left/right keystate and only move when pressed.
@@ -55,21 +58,26 @@ func get_input_direction():
 	if Input.is_action_pressed("ui_up"):
 		user_input.y -= 1
 	return user_input.normalized()
-	
-	
+
+
+func take_damage():
+	print("Ouch")
+
+
 # Standing state
 func start_idle():
 	$AnimationPlayer.play(Animation.IDLE)
-	speed = 0
 
 func start_walking():
 	$AnimationPlayer.play(Animation.IDLE)
-	speed = 150
+	speed = 0
 
 func process_idle(delta):
+	speed = max(0, speed - ACCELERATION)
 	process_standing()
 
 func process_walking(delta):
+	speed = min(MAX_SPEED, speed + ACCELERATION)
 	process_standing()
 
 func process_standing():
@@ -78,26 +86,38 @@ func process_standing():
 		direction = input_direction
 	$Sprite.set_flip_h(direction.x < 0)
 	if Input.is_action_just_pressed("ui_punch"):
-		state = State.ATTACKING
+		change_state(State.ATTACKING)
 	elif input_direction.length() > 0:
-		state = State.WALKING
+		change_state(State.WALKING)
 	else:
-		state = State.IDLE
+		change_state(State.IDLE)
 
 
 # Attacking state
 func start_attacking():
+	$Sprite.set_flip_h(direction.x < 0)
 	$AnimationPlayer.play(Animation.ATTACKING)
 	$Hitbox.rotation = Vector2.RIGHT.angle_to(direction)
 	speed = 0
 
-func take_damage():
-	print("Ouch")
+func process_attacking(delta):
+	if Input.is_action_just_pressed("ui_punch"):
+		attack_buffer.push_back(get_input_direction())
+
+
+# Signals and events
+func on_attack_animation_end():
+	var buffered_attack = attack_buffer.pop_front()
+	if buffered_attack == null:
+		change_state(State.IDLE)
+	else:
+		direction = buffered_attack if buffered_attack.length() else direction
+		start_attacking()
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	match anim_name:
 		Animation.ATTACKING:
-			state = State.WALKING
+			on_attack_animation_end()
 
 func _on_Hitbox_area_entered(area):
 	area.get_parent().take_damage(10)

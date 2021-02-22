@@ -79,3 +79,4 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 
 func _on_Hitbox_area_entered(area):
 	area.find_parent("Player").take_damage()
+
