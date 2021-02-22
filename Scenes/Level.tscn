@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Art/Tiles/Simple.tres" type="TileSet" id=1]
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Zombi.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/SpawnManager.gd" type="Script" id=4]
 
 [node name="Level" type="Node2D"]
+script = ExtResource( 4 )
+mob_scene = ExtResource( 3 )
 
 [node name="Ground" type="TileMap" parent="."]
 mode = 1
@@ -30,5 +33,7 @@ tile_data = PoolIntArray( -851964, 0, 0, -851963, 0, 0, -851962, 0, 0, -851961, 
 [node name="Player" parent="Walls" instance=ExtResource( 2 )]
 position = Vector2( 28, -17 )
 
-[node name="Zombi" parent="Walls" instance=ExtResource( 3 )]
-position = Vector2( 171.061, 50.6109 )
+[node name="Camera2D" parent="Walls/Player" index="5"]
+zoom = Vector2( 1, 1 )
+
+[editable path="Walls/Player"]

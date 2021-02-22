@@ -45,8 +45,6 @@ func change_state(new_state):
 		call("start_" + state)
 
 
-	
-
 # WALKING state
 func start_walking():
 	$AnimationPlayer.play(Animation.WALK)
