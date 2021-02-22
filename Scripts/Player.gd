@@ -20,6 +20,7 @@ var direction = Vector2()
 var speed = 0
 var state = ""
 var attack_buffer = []
+var health = 30
 
 
 func _ready():
@@ -27,7 +28,7 @@ func _ready():
 
 
 func _physics_process(delta):
-	move_and_collide(speed * direction * delta)
+	move_and_slide(speed * direction)
 
 
 func _process(delta):
@@ -60,8 +61,11 @@ func get_input_direction():
 	return user_input.normalized()
 
 
-func take_damage():
-	print("Ouch")
+func take_damage(damage):
+	health -= damage
+	if health <= 0:
+		queue_free()
+		
 
 
 # Standing state

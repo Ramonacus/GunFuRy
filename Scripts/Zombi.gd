@@ -14,10 +14,11 @@ const Animation = {
 	ATTACK = "Zombi attack E"
 }
 
-const speed = 50
+const SPEED = 50
+const ATTACK_DAMAGE = 10
 var direction = Vector2()
 
-const attack_range = 20
+const ATTACK_RANGE = 20
 
 var health = 30
 
@@ -28,7 +29,7 @@ func _ready():
 	change_state(State.WALKING)
 
 func _physics_process(delta):
-	move_and_collide(speed * direction * delta)
+	move_and_slide(SPEED * direction)
 
 func _process(delta):
 	if has_method("process_" + state):
@@ -54,7 +55,7 @@ func process_walking(delta):
 	direction = vector_to_player.normalized()
 	$Sprite.set_flip_h(direction.x < 0)	
 	
-	if vector_to_player.length() <= attack_range:
+	if vector_to_player.length() <= ATTACK_RANGE:
 		change_state(State.ATTACKING)
 
 
@@ -76,5 +77,5 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 		change_state(State.WALKING)
 
 func _on_Hitbox_area_entered(area):
-	area.find_parent("Player").take_damage()
+	area.find_parent("Player").take_damage(ATTACK_DAMAGE)
 
