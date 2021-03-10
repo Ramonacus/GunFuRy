@@ -79,4 +79,3 @@ tile_data = PoolIntArray( -1114112, 0, 0, -1114111, 0, 0, -1114110, 0, 0, -11141
 
 [node name="Player" parent="TileMap" instance=ExtResource( 2 )]
 position = Vector2( 417.224, 275.44 )
-collision_layer = 2

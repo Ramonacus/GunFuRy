@@ -1,15 +1,16 @@
 extends Actor
 
-var ACCELERATION: = 50
-var DECELERATION: = 75
+var DECELERATION: = MAX_SPEED / .12
+var ACCELERATION: = DECELERATION + MAX_SPEED / .08
 
-func _process(delta) -> void:
-	var input_direction = get_input_direction()
-	if input_direction.length():
-		speed = min(speed + ACCELERATION, MAX_SPEED)
-		direction = input_direction
-	else:
-		speed = 0
+func _process(delta: float) -> void:
+	var velocity: = direction * speed
+	velocity += get_input_direction() * ACCELERATION * delta
+	speed = max(0, min(MAX_SPEED, velocity.length() - DECELERATION * delta))
+	direction = velocity.normalized()
+	if (speed):
+		print(speed)
+	
 	
 func get_input_direction() -> Vector2:
 	var x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
